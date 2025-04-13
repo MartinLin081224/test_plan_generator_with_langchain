@@ -1,0 +1,30 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# 虛擬環境
+.venv/
+venv/
+env/
+
+# IDE 設定
+.idea/
+
+# Jupyter
+.ipynb_checkpoints
+
+# 測試產出
+output/
+output_word/
+output_pdf/
+output_excel/
+chroma_db/
+*.md
+*.docx
+*.xlsx
+*.pdf
+
+# 作業系統垃圾
+.DS_Store
+Thumbs.db
