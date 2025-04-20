@@ -16,25 +16,27 @@ if "latest_output" not in st.session_state:
 os.makedirs("input", exist_ok=True)
 
 # 0️⃣ 上傳檔案並自動建立 Chroma 向量庫
-st.markdown("### 📥 上傳產品說明文件\n（PDF / DOCX / TXT / PNG / JPG / JPEG / YAML / YML）")
+st.markdown("### 📥 上傳產品說明文件（PDF / DOCX / TXT / PNG / JPG / JPEG / YAML / YML / MD）")
 uploaded_files = st.file_uploader(
     "選擇一或多個檔案",
-    type=["pdf", "docx", "txt", "png", "jpg", "jpeg", "yaml", "yml"],
+    type=["pdf", "docx", "txt", "png", "jpg", "jpeg", "yaml", "yml", "md"],
     accept_multiple_files=True
 )
 
 if uploaded_files:
-    for file in uploaded_files:
-        file_path = os.path.join("input", file.name)
-        with open(file_path, "wb") as f:
-            f.write(file.read())
-        st.success(f"✅ 已上傳：{file.name}")
+    with st.sidebar:
+        st.markdown("### 📂 上傳狀態")
+        for file in uploaded_files:
+            file_path = os.path.join("input", file.name)
+            with open(file_path, "wb") as f:
+                f.write(file.read())
+            st.success(f"已上傳：{file.name}")
 
     result = os.system("python build_vectorstore.py")
     if result == 0:
-        st.success("✅ 向量資料庫已成功建立/更新")
+        st.sidebar.success("✅ 向量資料庫已成功建立/更新")
     else:
-        st.error("❌ 向量資料建立失敗，請檢查 build_vectorstore.py 是否正常")
+        st.sidebar.error("❌ 向量資料建立失敗，請檢查 build_vectorstore.py 是否正常")
 
 st.subheader("🔹 請依照順序操作：")
 
@@ -57,7 +59,7 @@ if st.button("1️⃣ 📄 製作一份測試文件（Markdown）"):
 ```
 {context}
 ```
-請根據提示：「{query}」，以 Markdown 格式產出一份完整測試文件。
+請根據提示：「{query}」，以 Markdown 格式產出一份產出完整測試文件（包含測試範圍、案例、方法、風險）。
 """)
 
     query = "請根據產品說明與 API 文件產生測試計劃"

@@ -27,7 +27,7 @@ prompt = PromptTemplate.from_template("""
 {context}
 ```
 
-請根據內容產出測試文件（包含測試範圍、案例、方法、風險）以 Markdown 格式呈現。
+以 Markdown 格式產出一份產出完整測試文件（包含測試範圍、案例、方法、風險）。
 """)
 chain = prompt | llm
 response = chain.invoke({"context": context})

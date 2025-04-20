@@ -25,7 +25,7 @@ prompt = PromptTemplate.from_template("""
 {context}
 ```
 
-請根據提示：「{query}」，以 Markdown 格式產出一份完整測試文件。
+請根據提示：「{query}」，以 Markdown 格式產出一份產出完整測試文件（包含測試範圍、案例、方法、風險）。
 """)
 
 docs = db.similarity_search(query, k=5)
