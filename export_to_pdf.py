@@ -1,20 +1,32 @@
 import os
-import sys
 from docx2pdf import convert
-from export_to_word import convert_markdown_to_docx
+from export_to_word import convert_markdown_to_word
 
-if len(sys.argv) < 2:
-    print("請指定要轉換的 .md 檔案")
-    sys.exit(1)
 
-md_file = sys.argv[1]
-word_file = os.path.join("output_word", os.path.basename(md_file).replace(".md", ".docx"))
-pdf_file = os.path.join("output_pdf", os.path.basename(md_file).replace(".md", ".pdf"))
+def convert_markdown_to_pdf(md_path, pdf_path):
+    """將 Markdown 檔轉為 PDF，透過 Word 中轉"""
+    if not os.path.exists(md_path):
+        raise FileNotFoundError(f"❌ 找不到 Markdown 檔案：{md_path}")
 
-os.makedirs("output_word", exist_ok=True)
-os.makedirs("output_pdf", exist_ok=True)
+    # 暫存 Word 檔
+    temp_docx = md_path.replace(".md", ".temp.docx")
 
-convert_markdown_to_docx(md_file, word_file)
-convert(word_file, pdf_file)
+    # Step 1：Markdown → Word
+    convert_markdown_to_word(md_path, temp_docx)
 
-print(f"✅ 已匯出：{pdf_file}")
+    # Step 2：Word → PDF
+    convert(temp_docx, pdf_path)
+
+    # Step 3：刪除中繼 Word 檔
+    if os.path.exists(temp_docx):
+        os.remove(temp_docx)
+
+    print(f"✅ PDF 已儲存至：{pdf_path}")
+
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) != 3:
+        print("用法：python export_to_pdf.py <input.md> <output.pdf>")
+    else:
+        convert_markdown_to_pdf(sys.argv[1], sys.argv[2])
